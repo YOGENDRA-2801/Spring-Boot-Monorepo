@@ -1,8 +1,7 @@
 package com.yogendrayadav.codingshuttle.SpringBootWeb.Controller;
 
 import com.yogendrayadav.codingshuttle.SpringBootWeb.DTO.EmployeeDTO;
-import com.yogendrayadav.codingshuttle.SpringBootWeb.Entity.EmployeeEntity;
-import com.yogendrayadav.codingshuttle.SpringBootWeb.Repository.EmployeeRepository;
+import com.yogendrayadav.codingshuttle.SpringBootWeb.Service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,24 +10,24 @@ import java.util.List;
 @RequestMapping("yogendrayadav")
 public class EmployeeController {
 
-    private EmployeeRepository employeeRepository;
+    private EmployeeService employeeService;
 
-    public EmployeeController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @GetMapping(path = "employee/{id}")
-    public EmployeeEntity getEmployeeById(@PathVariable(name = "id") Long employeeId) {
-        return employeeRepository.findById(employeeId).orElse(null) ;
+    public EmployeeDTO getEmployeeById(@PathVariable(name = "id") Long employeeId) {
+        return employeeService.findById(employeeId) ;
     }
 
     @GetMapping(path = "employee")
-    public List<EmployeeEntity> getEmployeeInformation() {
-        return employeeRepository.findAll() ;
+    public List<EmployeeDTO> getEmployeeInformation() {
+        return employeeService.findAll() ;
     }
 
     @PostMapping(path = "employee")
-    public EmployeeEntity postNewEmployee(@RequestBody EmployeeEntity employeeEntity) {
-        return employeeRepository.save(employeeEntity) ;
+    public EmployeeDTO postNewEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        return employeeService.save(employeeDTO) ;
     }
 }

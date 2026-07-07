@@ -12,9 +12,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeDTO {
+    private Long id ;
     private String name ;
     private String email ;
-    private int age ;
+    private Integer age ;
     private LocalDate joiningDate ;
     private Boolean isEmployee ;
 }

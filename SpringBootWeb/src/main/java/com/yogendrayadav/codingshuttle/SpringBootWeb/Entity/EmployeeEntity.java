@@ -20,7 +20,7 @@ public class EmployeeEntity {
     private Long id ;
     private String name ;
     private String email ;
-    private int age ;
+    private Integer age ;
     private LocalDate joiningDate ;
     private Boolean isEmployee ;
 }
