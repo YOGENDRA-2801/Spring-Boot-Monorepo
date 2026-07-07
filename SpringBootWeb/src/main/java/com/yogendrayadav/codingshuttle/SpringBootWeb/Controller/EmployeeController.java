@@ -1,48 +1,34 @@
 package com.yogendrayadav.codingshuttle.SpringBootWeb.Controller;
 
 import com.yogendrayadav.codingshuttle.SpringBootWeb.DTO.EmployeeDTO;
+import com.yogendrayadav.codingshuttle.SpringBootWeb.Entity.EmployeeEntity;
+import com.yogendrayadav.codingshuttle.SpringBootWeb.Repository.EmployeeRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("yogendrayadav")
 public class EmployeeController {
 
-    @GetMapping("/welcome")
-    public String greet() {
-        return "Hello World" ;
+    private EmployeeRepository employeeRepository;
+
+    public EmployeeController(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
-//    @GetMapping(path = "employee/{employeeId}")
-//    public EmployeeDTO getEmployeeById(@PathVariable long employeeId) {
-//        return new EmployeeDTO(employeeId, "Yogendra", 23, LocalDate.now(), true) ;
-//    }
-
-    @GetMapping(path = "employee/{naam}")
-    public EmployeeDTO getEmployeeByName(@PathVariable(name = "naam") String employeename) {
-        return new EmployeeDTO(1l, employeename, 23, LocalDate.now(), true) ;
+    @GetMapping(path = "employee/{id}")
+    public EmployeeEntity getEmployeeById(@PathVariable(name = "id") Long employeeId) {
+        return employeeRepository.findById(employeeId).orElse(null) ;
     }
 
     @GetMapping(path = "employee")
-    public String getEmployeeInformation(@RequestParam(name = "name", required = false) String name,
-                                 @RequestParam(name = "umar", required = false) Integer age) {
-        return "The age of boss is " + age + " his name is " + name ;
+    public List<EmployeeEntity> getEmployeeInformation() {
+        return employeeRepository.findAll() ;
     }
 
     @PostMapping(path = "employee")
-    public String postSimpleMessage() {
-        return "POST MAPPING IS USED" ;
-    }
-
-    @PutMapping(path = "employee")
-    public String putSimpleMessage() {
-        return "POST MAPPING IS USED" ;
-    }
-
-    @PostMapping(path = "hire")
-    public EmployeeDTO postEmployeeDTO(@RequestBody EmployeeDTO employeeDTO){
-        employeeDTO.setId(23l);
-        return employeeDTO ;
+    public EmployeeEntity postNewEmployee(@RequestBody EmployeeEntity employeeEntity) {
+        return employeeRepository.save(employeeEntity) ;
     }
 }
