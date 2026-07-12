@@ -2,6 +2,7 @@ package com.yogendrayadav.codingshuttle.SpringBootWeb.Controller;
 
 import com.yogendrayadav.codingshuttle.SpringBootWeb.DTO.EmployeeDTO;
 import com.yogendrayadav.codingshuttle.SpringBootWeb.Service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,14 +35,14 @@ public class EmployeeController {
     }
 
     @PostMapping(path = "employee")
-    public ResponseEntity<EmployeeDTO> postNewEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<EmployeeDTO> postNewEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(employeeService.hireEmployee(employeeDTO)) ;
     }
 
     @PutMapping(path = "employee/{id}")
-    public ResponseEntity<EmployeeDTO> updateEmployeeById(@PathVariable(name = "id") Long employeeId, @RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<EmployeeDTO> updateEmployeeById(@PathVariable(name = "id") Long employeeId, @RequestBody @Valid EmployeeDTO employeeDTO) {
         EmployeeDTO updatedEmployeeDTO = employeeService.updateEmployeeById(employeeId, employeeDTO) ;
         if(updatedEmployeeDTO != null) return ResponseEntity.ok(updatedEmployeeDTO) ;
         else return ResponseEntity.notFound().build() ;
