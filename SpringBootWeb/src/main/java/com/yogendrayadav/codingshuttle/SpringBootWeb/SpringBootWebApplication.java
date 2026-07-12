@@ -8,7 +8,8 @@ public class SpringBootWebApplication {
 
 	static void main(String[] args) {
 		SpringApplication.run(SpringBootWebApplication.class, args);
-//		System.out.println("HELLO WORLD");
+//		modelMapper.map(employeeDTO, existingEntity) → Existing object ko UPDATE karo
+//		modelMapper.map(employeeDTO, EmployeeEntity.class) → Naya object banao
 	}
 
 }
