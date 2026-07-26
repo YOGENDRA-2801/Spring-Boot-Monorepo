@@ -1,9 +1,10 @@
 package com.yogendrayadav.codingshuttle.SpringBootWeb.Service;
 
+import com.yogendrayadav.codingshuttle.SpringBootWeb.CustomException.ResourceNotFoundException;
 import com.yogendrayadav.codingshuttle.SpringBootWeb.DTO.EmployeeDTO;
 import com.yogendrayadav.codingshuttle.SpringBootWeb.Entity.EmployeeEntity;
 import com.yogendrayadav.codingshuttle.SpringBootWeb.Repository.EmployeeRepository;
-import org.apache.el.util.ReflectionUtil;
+import org.jspecify.annotations.NonNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
@@ -11,6 +12,7 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -25,10 +27,10 @@ public class EmployeeService {
         this.modelMapper = modelMapper;
     }
 
-    public Optional<EmployeeDTO> findById(Long employeeId) {
-//        return modelMapper.map(employeeRepository.findById(employeeId).orElse(null), EmployeeDTO.class) ; // modelMapper cannot handle null
-        Optional<EmployeeEntity> employeeEntity1 = employeeRepository.findById(employeeId) ;  // Ager yah null nikla to map chalega hi nahi
-        return employeeEntity1.map( employeeEntity2 -> modelMapper.map(employeeEntity2, EmployeeDTO.class) ) ;
+    public EmployeeDTO findById(Long employeeId) {
+        return employeeRepository.findById(employeeId)
+                .map( employeeEntity2 -> modelMapper.map(employeeEntity2, EmployeeDTO.class) ) // will run iff entity is found
+                .orElseThrow(() -> new NoSuchElementException("Employee Not Found"))  ; // will run iff null is found
     }
 
     public List<EmployeeDTO> findAll() {
@@ -46,35 +48,28 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updateEmployeeById(Long employeeId, EmployeeDTO employeeDTO) {
-        boolean exist = employeeRepository.existsById(employeeId) ;
-        if (exist) {
-            EmployeeEntity existingEntity = employeeRepository.findById(employeeId).get() ; // If a value is present, returns the value, otherwise throws NoSuchElementException.
-            modelMapper.map(employeeDTO, existingEntity) ; // Existing entity ko update karta hai yah
-            existingEntity.setId(employeeId);
-            return modelMapper.map(employeeRepository.save(existingEntity), EmployeeDTO.class) ;
-        }
-        return null;
+        EmployeeEntity existingEntity = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee with id "+ employeeId +" to be updated is not found"));
+        modelMapper.map(employeeDTO, existingEntity) ;
+        existingEntity.setId(employeeId);
+        return modelMapper.map(employeeRepository.save(existingEntity), EmployeeDTO.class) ;
     }
 
-    public EmployeeDTO patchEmployeeById(Long employeeId, Map<String, Object> patchDetail) {
-        EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).orElse(null) ;
-        if (employeeEntity != null) {
-            patchDetail.forEach( (key, value) -> {
-                Field field = ReflectionUtils.findField(EmployeeEntity.class, key) ;
-                field.setAccessible(true);
-                ReflectionUtils.setField(field, employeeEntity, value);
-            } );
-            return modelMapper.map(employeeRepository.save(employeeEntity), EmployeeDTO.class) ;
-        }
-        return null;
+    public EmployeeDTO patchEmployeeById(Long employeeId, @NonNull Map<String, Object> patchDetail) {
+        EmployeeEntity employeeEntity = employeeRepository
+                .findById(employeeId)
+                .orElseThrow( () -> new ResourceNotFoundException("Employee with id "+ employeeId + " is not found for patch operation")) ;
+        patchDetail.forEach( (key, value) -> {
+            Field field = ReflectionUtils.findField(EmployeeEntity.class, key) ;
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, employeeEntity, value);
+        } );
+        return modelMapper.map(employeeRepository.save(employeeEntity), EmployeeDTO.class) ;
     }
 
-    public Boolean deleteEmployeeById(Long employeeId) {
-        boolean exist = employeeRepository.existsById(employeeId) ;
-        if (exist) {
-            employeeRepository.deleteById(employeeId);
-            return true;
-        }
-        return false;
+    public void deleteEmployeeById(Long employeeId) {
+        EmployeeEntity employeeEntity = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee with id "+ employeeId +" to be deleted is not found"));
+        employeeRepository.delete(employeeEntity);
     }
 }
