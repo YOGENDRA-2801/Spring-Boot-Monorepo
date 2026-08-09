@@ -13,54 +13,45 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-//    @ExceptionHandler(NoSuchElementException.class)
-//    public ResponseEntity<String> localExceptionHandler(NoSuchElementException noSuchElementException) {
-//        return ResponseEntity
-//                .status(HttpStatus.NOT_FOUND)
-//                .body(noSuchElementException.getMessage()) ;
-//    }
-
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ApiError> noSuchElementException(@NonNull NoSuchElementException nsee) {
+    public ResponseEntity<ApiResponse> noSuchElementException(@NonNull NoSuchElementException nsee) {
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.NOT_FOUND) // for user information
                 .message(nsee.getMessage())
                 .build() ;
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND) // for actual 404 indication
-                .body(apiError);
+        return buildErrorResponseEntity(apiError);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiError> resourceNotFoundException(@NonNull ResourceNotFoundException rnfe) {
+    public ResponseEntity<ApiResponse> resourceNotFoundException(@NonNull ResourceNotFoundException rnfe) {
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.NOT_FOUND) // for user information
                 .message(rnfe.getMessage())
                 .build() ;
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND) // for actual 404 indication
-                .body(apiError);
+        return buildErrorResponseEntity(apiError);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> generalException(@NonNull Exception e) {
+    public ResponseEntity<ApiResponse> generalException(@NonNull Exception e) {
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR) // for user information
                 .message(e.getMessage())
                 .build() ;
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR) // for actual 404 indication
-                .body(apiError);
+        return buildErrorResponseEntity(apiError);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> validationException(@NonNull MethodArgumentNotValidException manve) {
+    public ResponseEntity<ApiResponse> validationException(@NonNull MethodArgumentNotValidException manve) {
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.BAD_REQUEST) // for user information
                 .message(manve.getMessage())
                 .build() ;
+        return buildErrorResponseEntity(apiError);
+    }
+
+    public ResponseEntity<ApiResponse> buildErrorResponseEntity(ApiError apiError) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST) // for actual 404 indication
-                .body(apiError);
+                .status(apiError.getStatus())
+                .body(ApiResponse.builder().error(apiError).build()) ;
     }
 }
