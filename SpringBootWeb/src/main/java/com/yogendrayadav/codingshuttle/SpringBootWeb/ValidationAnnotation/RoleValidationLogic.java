@@ -9,6 +9,7 @@ public class RoleValidationLogic implements ConstraintValidator<RoleValidation, 
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+        if (s == null) return false ;
         List allRoles = List.of("ADMIN", "USER");
         return allRoles.contains(s);
     }
