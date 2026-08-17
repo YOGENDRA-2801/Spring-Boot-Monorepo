@@ -66,9 +66,10 @@ public class EmployeeService {
         return modelMapper.map(employeeRepository.save(employeeEntity), EmployeeDTO.class) ;
     }
 
-    public void deleteEmployeeById(Long employeeId) {
+    public String deleteEmployeeById(Long employeeId) {
         EmployeeEntity employeeEntity = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee with id "+ employeeId +" to be deleted is not found"));
         employeeRepository.delete(employeeEntity);
+        return "Department with id " + employeeId + " has been successfully deleted" ;
     }
 }

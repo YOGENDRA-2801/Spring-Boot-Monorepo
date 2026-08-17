@@ -1,5 +1,6 @@
 package com.yogendrayadav.codingshuttle.SpringBootWeb.advices;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -13,12 +14,18 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class GlobalResponseHandler implements ResponseBodyAdvice<Object>
 {
     @Override
-    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public boolean supports(@NonNull MethodParameter returnType, @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
         return true;
     }
 
     @Override
-    public @Nullable Object beforeBodyWrite(@Nullable Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+    public @Nullable Object beforeBodyWrite(@Nullable Object body,
+                                            @NonNull MethodParameter returnType,
+                                            @NonNull MediaType selectedContentType,
+                                            @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
+                                            @NonNull ServerHttpRequest request, 
+                                            @NonNull ServerHttpResponse response)
+    {
         if (body instanceof ApiResponse<?>){
             return body ;
         }

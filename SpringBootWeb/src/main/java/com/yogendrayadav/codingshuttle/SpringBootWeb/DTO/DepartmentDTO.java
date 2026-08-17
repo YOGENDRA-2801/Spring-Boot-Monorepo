@@ -30,7 +30,7 @@ public class DepartmentDTO {
     private LocalDate createdAt ;
 
     @Min(value = 3, message = "Minimum digit should be 3")
-    @Max(value = 100, message = "Maximum digit can be 10")
+    @Max(value = 100, message = "Maximum digit can be 100")
     @Prime
     private Integer empId ;
 

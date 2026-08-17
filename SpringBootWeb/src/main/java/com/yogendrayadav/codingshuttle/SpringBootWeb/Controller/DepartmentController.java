@@ -48,10 +48,10 @@ public class DepartmentController {
     }
 
     @DeleteMapping(path = "department/{id}")
-    public ResponseEntity<String> deleteDepartmentById(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteDepartmentById(@PathVariable Long id) {
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(departmentService.deleteDepartmentById(id));
+                .status(HttpStatus.ACCEPTED)
+                .body(Map.of("message", departmentService.deleteDepartmentById(id)));
     }
 
     @GetMapping(path = "department/{id}")

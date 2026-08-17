@@ -60,8 +60,9 @@ public class EmployeeController {
     }
 
     @DeleteMapping(path = "employee/{id}")
-    public ResponseEntity<String> deleteEmployeeById(@PathVariable(name = "id") Long employeeId) {
-        employeeService.deleteEmployeeById(employeeId);
-        return ResponseEntity.status(HttpStatus.OK).body("Employee Deleted") ;
+    public ResponseEntity<Map<String, String>> deleteEmployeeById(@PathVariable(name = "id") Long employeeId) {
+        return ResponseEntity
+                .status(HttpStatus.ACCEPTED)
+                .body(Map.of("message", employeeService.deleteEmployeeById(employeeId)));
     }
 }
