@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(
+        name = "product",
         uniqueConstraints = {
                 @UniqueConstraint(name = "product", columnNames = {"title", "unit_price"})
         },
@@ -24,7 +25,7 @@ import java.time.LocalDateTime;
                 @Index(name = "sku_index", columnList = "stock_keeping_unit")
         }
 )
-public class Product {
+public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
