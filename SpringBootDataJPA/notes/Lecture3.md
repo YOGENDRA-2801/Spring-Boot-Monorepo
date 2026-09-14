@@ -20,6 +20,7 @@
         such as when joins are involved, or when projecting a specific column instead of the full entity.
 4. List<Entity>, Entity, Optional<Entity> — most common return types; if there's a probability of null in the entity return type, switch to Optional.
 
+
 # Recap
 1. Create a repository interface that extends JpaRepository<C, T> and annotate it with @Repository
 2. Use test class and create dedicated methods annotated with @Test for each category

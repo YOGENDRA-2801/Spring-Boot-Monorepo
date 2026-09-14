@@ -23,7 +23,7 @@ public class ProductController {
 
     @GetMapping("/orderby")
     public List<ProductEntity> sortingViaOrderBy() {
-//        return  productRepository.findByOrderByTitleAsc() ;
+//     return  productRepository.findByOrderByTitleAsc() ;
         return productRepository.findByOrderByTitleDesc() ;
     }
 
@@ -54,4 +54,5 @@ public class ProductController {
         return productRepository.
                 findBySkuContaining("001", PageRequest.of(pageNumber, PAGE_SIZE, Sort.by("title").descending()) ) ;
     }
+
 }
