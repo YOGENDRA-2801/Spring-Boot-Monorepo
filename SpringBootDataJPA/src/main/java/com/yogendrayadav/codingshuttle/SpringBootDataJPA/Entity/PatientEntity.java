@@ -35,11 +35,11 @@ public class PatientEntity {
     @CreationTimestamp
     private LocalDateTime createdAt ;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "insurance")
     private InsuranceEntity insuranceEntity ;
 
-    @OneToMany(mappedBy = "patientEntity")
+    @OneToMany(mappedBy = "patientEntity", cascade = CascadeType.ALL)
     private Set<AppointmentEntity> appointmentEntity = new HashSet<>();
 
 }

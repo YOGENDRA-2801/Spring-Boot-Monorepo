@@ -34,7 +34,7 @@ public class DoctorEntity
     @Column(updatable = false)
     private LocalDateTime createdAt ;
 
-    @OneToMany(mappedBy = "doctorEntity")
+    @OneToMany(mappedBy = "doctorEntity", cascade = CascadeType.ALL)
     private Set<AppointmentEntity> appointmentEntities = new HashSet<>() ;
 
     @ManyToMany
