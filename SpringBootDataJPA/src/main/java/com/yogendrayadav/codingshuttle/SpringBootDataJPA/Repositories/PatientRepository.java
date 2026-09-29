@@ -25,4 +25,14 @@ public interface PatientRepository extends JpaRepository<PatientEntity, Long>
     @Transactional
     @Query("UPDATE PatientEntity p SET p.name=:name , p.bloodGroup=:bloodGroup WHERE p.id=:id")
     Integer updateGroupAndName(@Param("name") String name, @Param("bloodGroup") BloodGroupType bloodGroupType, @Param("id") Long id) ;
+
+    @Transactional
+    @Query("SELECT DISTINCT p FROM PatientEntity p " +
+            "LEFT JOIN FETCH p.insuranceEntity i " +
+            "JOIN FETCH p.appointmentEntity a")
+    List<PatientEntity> getAllAppointmentsOfPatientWithInsuranceDetail() ;
+
+    @Query("SELECT p FROM PatientEntity p LEFT JOIN FETCH p.appointmentEntity")
+    List<PatientEntity> getAllPatientsWithAppointments() ;
+
 }

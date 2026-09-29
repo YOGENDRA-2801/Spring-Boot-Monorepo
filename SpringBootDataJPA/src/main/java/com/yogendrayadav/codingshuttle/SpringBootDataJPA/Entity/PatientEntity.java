@@ -16,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class PatientEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +36,11 @@ public class PatientEntity {
     @CreationTimestamp
     private LocalDateTime createdAt ;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "insurance")
     private InsuranceEntity insuranceEntity ;
 
-    @OneToMany(mappedBy = "patientEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "patientEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<AppointmentEntity> appointmentEntity = new HashSet<>();
-
 }

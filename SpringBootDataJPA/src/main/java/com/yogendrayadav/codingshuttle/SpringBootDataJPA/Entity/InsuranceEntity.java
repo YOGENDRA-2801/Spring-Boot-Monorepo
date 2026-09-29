@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class InsuranceEntity
 {
     @Id
@@ -33,6 +34,7 @@ public class InsuranceEntity
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt ;
 
+    @ToString.Exclude
     @OneToOne(mappedBy = "insuranceEntity")
     private PatientEntity patientEntity ;
 }

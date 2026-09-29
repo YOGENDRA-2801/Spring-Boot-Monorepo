@@ -21,15 +21,14 @@ public class CascadeTest {
     private AppointmentService appointmentService ;
 
     @Test
-    public void testAddOfInsuranceToPatient() {
+    public void testCreateInsuranceForPatient() {
         InsuranceEntity insuranceEntity = InsuranceEntity.builder()
-//                .id(1L)
                 .provider("Star Health")
                 .validUntil(LocalDate.of(2030, 12, 31))
                 .policyNumber("7506562343")
                 .createdAt(LocalDateTime.now())
                 .build() ;
-        patientService.assignInsuranceToPatient(2L, insuranceEntity);
+        patientService.createInsuranceForPatient(2L, insuranceEntity);
     }
 
     @Test
@@ -45,6 +44,16 @@ public class CascadeTest {
                 .appointmentTime(LocalDateTime.now())
                 .build();
         appointmentService.addAppointment(appointmentEntity, 1L, 1L) ;
+    }
+
+    @Test
+    public void testAddInsuranceToPatient(){
+        patientService.assignInsuranceToPatient(9l, 4l);
+        patientService.assignInsuranceToPatient(8l, 8l);
+        patientService.assignInsuranceToPatient(7l, 9l);
+        patientService.assignInsuranceToPatient(6l, 6l);
+        patientService.assignInsuranceToPatient(5l, 7l);
+        patientService.assignInsuranceToPatient(4l, 5l);
     }
 
 }

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class AppointmentEntity
 {
     @Id
@@ -26,11 +27,13 @@ public class AppointmentEntity
 
     private String Status ;
 
-    @ManyToOne
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor", nullable = false)
     private DoctorEntity doctorEntity ;
 
-    @ManyToOne
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient", nullable = false)
     private PatientEntity patientEntity ;
 }
